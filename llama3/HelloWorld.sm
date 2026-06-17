@@ -1,0 +1,5 @@
+Object subclass: HelloWorld [
+    printString << 'Hello, World!'
+]
+
+HelloWorld new print

@@ -1,0 +1,25 @@
+% =========================
+% Definición del grafo
+% =========================
+
+arista(0,1).
+arista(0,2).
+arista(1,3).
+arista(2,3).
+
+% =========================
+% Reconocedor de orden topológico
+% =========================
+
+orden_topologico(Orden) :-
+    % Para cada arista U -> V
+    forall(
+        arista(U, V),
+        aparece_antes(U, V, Orden)
+    ).
+
+% U debe aparecer antes que V en la lista
+aparece_antes(U, V, Lista) :-
+    nth0(PosU, Lista, U),
+    nth0(PosV, Lista, V),
+    PosU < PosV.

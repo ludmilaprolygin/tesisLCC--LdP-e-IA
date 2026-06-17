@@ -1,0 +1,59 @@
+TopologicalSorter subclass: #GrafoTopologico
+
+GrafoTopologico class >> new
+    <category: 'initialization'>
+    ^ super new initialize
+
+GrafoTopologico >> initialize
+    <category: 'initialization'>
+    inEdges := Dictionary new.
+    outEdges := Dictionary new.
+
+GrafoTopologico >> addEdge: fromVertex to: toVertex
+    <category: 'actions'>
+    (inEdges at: toVertex put: Set with: fromVertex) ifAbsent.
+    (outEdges at: fromVertex put: Set with: toVertex) ifAbsent
+
+GrafoTopologico >> topologicalSort
+    <category: 'actions'>
+    | visited queue result |
+    visited := Set new.
+    queue := ArrayedCollection new.
+
+    inEdges keysDo: [ :v | 
+        (visited includes: v) ifFalse: [
+            queue addLast: v
+            .
+            self DFS: v
+        ] ].
+
+    ^ result
+
+GrafoTopologico >> DFS: vertex
+    <category: 'actions'>
+    | adjacentVertices |
+    visited add: vertex.
+    adjacentVertices := inEdges at: vertex ifAbsent: [^ self].
+    
+    adjacentVertices do: [:v | 
+        (visited includes: v) ifFalse: [
+            self DFS: v
+        ] ].
+
+    outEdges at: vertex put: nil.
+
+GrafoTopologico >> printOn: aStream
+    <category: 'actions'>
+    aStream << 'GrafoTopologico new'
+
+| grafo |
+grafo := GrafoTopologico new.
+
+grafo addEdge: 1 to: 2.
+grafo addEdge: 1 to: 3.
+grafo addEdge: 2 to: 4.
+grafo addEdge: 3 to: 5.
+
+transitivityOrder := grafo topologicalSort.
+
+transitivityOrder do: [:v | Transcript show: v; cr].

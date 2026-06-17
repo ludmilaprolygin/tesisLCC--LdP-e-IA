@@ -1,0 +1,116 @@
+Object subclass: Grafo [
+    | vertices |
+
+    Grafo class >> nuevo [
+        ^self new initializeVertices:nil.
+    ]
+
+    initializeVertices:vertices [
+        self vertices:vertices.
+    ]
+
+    vertices:anObject [
+        vertices := anObject.
+    ]
+
+    vertices [
+        ^vertices.
+    ]
+
+    agregarVertice:aVertice [
+        vertices add:aVertice.
+    ]
+
+    agregarArista:unaArista desdeVertice:unOrigen hastaVertice:unDestino [
+        unOrigen agregarVecino:unDestino conPeso:unaArista peso.
+    ]
+]
+
+Object subclass: Vertice [
+    | nombre vecinos |
+
+    Vertice class >> nuevoConNombre:nombre [
+        ^self new initializeNombre:nombre vecinos:nil.
+    ]
+
+    initializeNombre:nombre vecinos:vecinos [
+        self nombre:nombre.
+        self vecinos:vecinos.
+    ]
+
+    nombre:nombre [
+        nombre := nombre.
+    ]
+
+    nombre [
+        ^nombre.
+    ]
+
+    agregarVecino:unVertice conPeso:peso [
+        (vecinos includes:unVertice) ifFalse: [ vecinos add:unVertice ].
+    ]
+
+    vecinos [
+        ^vecinos.
+    ]
+]
+
+Object subclass: OrdenTopologico [
+    | grafo orden |
+
+    OrdenTopologico class >> nuevoConGrafo:unGrafo [
+        ^self new initializeGrafo:unGrafo orden:nil.
+    ]
+
+    initializeGrafo:unGrafo orden:unOrden [
+        self grafo:unGrafo.
+        self orden:unOrden.
+    ]
+
+    grafo:unGrafo [
+        grafo := unGrafo.
+    ]
+
+    grafo [
+        ^grafo.
+    ]
+
+    orden:unOrden [
+        orden := unOrden.
+    ]
+
+    orden [
+        ^orden.
+    ]
+
+    ejecutar [
+        | visitados |
+        visitados := OrderedCollection new.
+        (grafo vertices) do: [ :vertice | 
+            (visitados includes: vertice) ifFalse: [ self dfsVisitDesdeVertice:vertice conVisitados:visitados ] ].
+        ^orden reverse.
+    ]
+
+    dfsVisitDesdeVertice:vertice conVisitados:visitados [
+        visitados add:vertice.
+        vertice vecinos do: [ :vecino | 
+            ((visitados includes: vecino) not) ifTrue: [ self dfsVisitDesdeVertice:vecino conVisitados:visitados ] ].
+        orden add:vertice nombre.
+    ]
+]
+
+"Uso del ejemplo"
+| g o |
+g := Grafo nuevo.
+
+(g agregarVertice:(Vertice nuevoConNombre:'1')).
+(g agregarVertice:(Vertice nuevoConNombre:'2')).
+(g agregarVertice:(Vertice nuevoConNombre:'3')).
+(g agregarVertice:(Vertice nuevoConNombre:'4')).
+
+(g agregarArista:1 desdeVertice:g vertices first hastaVertice:g vertices second).
+(g agregarArista:1 desdeVertice:g vertices second hastaVertice:g vertices third).
+(g agregarArista:1 desdeVertice:g vertices fourth hastaVertice:g vertices third).
+
+o := OrdenTopologico nuevoConGrafo:g.
+Transcript show:o ejecutar.

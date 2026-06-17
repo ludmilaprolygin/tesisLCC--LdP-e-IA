@@ -1,0 +1,4 @@
+calcularPrecioFinal: precio descuento: descuento
+    ^ precio * (1 - (descuento / 100))
+
+self calcularPrecioFinal: 50 descuento: '10' asNumber

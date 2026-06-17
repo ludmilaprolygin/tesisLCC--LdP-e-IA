@@ -1,0 +1,32 @@
+% es_orden_topologico(+Arcos, +Orden)
+% Arcos: lista de arcos U-V
+% Orden: lista propuesta como orden topologico
+
+es_orden_topologico(Arcos, Orden) :-
+    contiene_todos_los_nodos(Arcos, Orden),
+    respeta_arcos(Arcos, Orden).
+
+
+contiene_todos_los_nodos(Arcos, Orden) :-
+    nodos_de_arcos(Arcos, Nodos),
+    sort(Nodos, NodosSinRepetir),
+    sort(Orden, OrdenSinRepetir),
+    NodosSinRepetir = OrdenSinRepetir.
+
+
+nodos_de_arcos([], []).
+
+nodos_de_arcos([U-V | Resto], [U, V | NodosResto]) :-
+    nodos_de_arcos(Resto, NodosResto).
+
+
+respeta_arcos([], _).
+
+respeta_arcos([U-V | Resto], Orden) :-
+    aparece_antes(U, V, Orden),
+    respeta_arcos(Resto, Orden).
+
+
+aparece_antes(U, V, Orden) :-
+    append(_, [U | DespuesDeU], Orden),
+    member(V, DespuesDeU).

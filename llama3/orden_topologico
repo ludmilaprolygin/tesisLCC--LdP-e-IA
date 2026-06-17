@@ -1,0 +1,24 @@
+top_sort(V, Order) :-
+    findall(E, edge(V, E), Edges),
+    (Edges = [] -> Order = [V] ;  % Caso base: vértice sin aristas
+     findall(N, top_sort(N, TempOrder), TempOrders),
+     append(TempOrders, [V], Order)).
+
+edge(A, B).  % Definición de las aristas del grafo
+
+top_sort(V, Order) :-
+    \+findedge(V),  % Caso base: vértice sin aristas
+    (findall(E, edge(V, E), _Edges) ->  % Si hay aristas, ordena los vecinos
+     findall(N, top_sort(N, TempOrder), TempOrders),
+     append(TempOrders, [V], Order) ;  % Sino, el vértice no tiene aristas ni vecinos
+    Order = [V]).
+
+findedge(A).  % Predicado que verifica si hay una arista entre A y algún otro vértice
+
+edge(a, b).
+edge(b, c).
+edge(c, d).
+edge(d, e).
+
+% ?- top_sort(e, Order).
+% Order = [e, d, c, b, a].

@@ -1,0 +1,5 @@
+descuentoFinal := [:precio :descuento |
+	precio - (precio * descuento asNumber / 100)
+].
+
+Transcript show: ((descuentoFinal value: 50 value: '10') printString); cr.

@@ -1,0 +1,6 @@
+% calcular_precio_final(+Precio, +Descuento, -PrecioFinal)
+
+calcular_precio_final(Precio, Descuento, PrecioFinal) :-
+    PrecioFinal is Precio * (1 - Descuento / 100).
+
+?- calcular_precio_final(50, "10", PrecioFinal).

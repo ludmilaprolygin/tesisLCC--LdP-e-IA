@@ -1,0 +1,9 @@
+discountPrice: aNumber discount: aString
+    | percentage |
+    percentage := aString asInteger / 100.
+    ^ (aNumber - (aNumber * percentage)) rounded
+
+price := 50. 
+discount := '10'.
+result := discountPrice: price discount: discount.
+Transcript print: result; cr.

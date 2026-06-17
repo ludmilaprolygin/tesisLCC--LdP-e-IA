@@ -1,0 +1,49 @@
+% Reconocedor de orden topológico para grafos en Prolog
+% Representación: lista de aristas como edge(U,V).
+% topological_order(Edges, Order) succeeds if Order is a topological ordering.
+
+% Ejemplo de uso directo:
+% ?- sample_graph(G), topological_order(G, [5,4,2,3,1,0]).  % true
+% ?- sample_graph(G), topological_order(G, [4,5,2,3,1,0]).  % false
+
+% topological_order(+Edges, +Order)
+topological_order(Edges, Order) :-
+    nodes_from_edges(Edges, Nodes),
+    sort(Nodes, NodesSet),
+    sort(Order, OrderSet),
+    NodesSet == OrderSet,
+    position_map(Order, Map),
+    forall(member(edge(U,V), Edges), (
+        memberchk(U-Ui, Map),
+        memberchk(V-Vi, Map),
+        Ui < Vi
+    )).
+
+% nodes_from_edges(+Edges, -Nodes)
+nodes_from_edges(Edges, Nodes) :-
+    nodes_from_edges(Edges, [], Nodes).
+
+nodes_from_edges([], Acc, Nodes) :-
+    sort(Acc, Nodes).
+nodes_from_edges([edge(U,V)|T], Acc, Nodes) :-
+    nodes_from_edges(T, [U,V|Acc], Nodes).
+
+% position_map(+List, -Map)
+% Map is a list of Elem-Index pairs (0-based index)
+position_map(List, Map) :-
+    position_map(List, 0, Map).
+
+position_map([], _, []).
+position_map([H|T], I, [H-I|Map]) :-
+    I1 is I + 1,
+    position_map(T, I1, Map).
+
+% --- Ejemplo y pruebas ---
+sample_graph([edge(5,2), edge(5,0), edge(4,0), edge(4,1), edge(2,3), edge(3,1)]).
+
+run_examples :-
+    sample_graph(G),
+    ( topological_order(G, [5,4,2,3,1,0]) -> writeln('order1: true') ; writeln('order1: false') ),
+    ( topological_order(G, [4,5,2,3,1,0]) -> writeln('order2: true') ; writeln('order2: false') ).
+
+:- (current_prolog_flag(argv, _), false) -> true ; true.

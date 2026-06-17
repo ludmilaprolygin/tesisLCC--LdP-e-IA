@@ -1,0 +1,5 @@
+precio_final(Precio, DescuentoStr, PrecioFinal) :-
+    number_string(Descuento, DescuentoStr),
+    PrecioFinal is Precio * (1 - Descuento / 100).
+
+?- precio_final(50, "10", PrecioFinal).

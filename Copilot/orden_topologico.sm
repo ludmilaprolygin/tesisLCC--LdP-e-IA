@@ -1,0 +1,65 @@
+Object subclass: #OrdenTopologico
+	instanceVariableNames: 'adyacencias vertices'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Graph-Algorithms'.
+
+OrdenTopologico class >> conVertices: unaColeccion yAristas: aristas
+	^ self new inicializarConVertices: unaColeccion yAristas: aristas.
+
+OrdenTopologico >> inicializarConVertices: unaColeccion yAristas: aristas
+	vertices := unaColeccion asOrderedCollection.
+	adyacencias := Dictionary new.
+	vertices do: [:v | adyacencias at: v put: OrderedCollection new].
+	aristas do: [:arista |
+		| origen destino |
+		origen := arista first.
+		destino := arista second.
+		(adyacencias includesKey: origen) ifFalse: [adyacencias at: origen put: OrderedCollection new].
+		(adyacencias includesKey: destino) ifFalse: [adyacencias at: destino put: OrderedCollection new].
+		(adyacencias at: origen) add: destino].
+	^ self.
+
+OrdenTopologico >> esOrdenTopologico: unOrden
+	| posicion |
+	(unOrden size = vertices size) ifFalse: [^ false].
+	(unOrden asSet size = unOrden size) ifFalse: [^ false].
+	((unOrden asSet includesAll: vertices) not) ifTrue: [^ false].
+
+	posicion := Dictionary new.
+	unOrden withIndexDo: [:vertice :indice |
+		posicion at: vertice put: indice].
+
+	vertices do: [:origen |
+		(adyacencias at: origen ifAbsent: [#()]) do: [:destino |
+			((posicion at: origen) > (posicion at: destino)) ifTrue: [^ false]]].
+	^ true.
+
+OrdenTopologico >> tieneOrdenTopologico
+	^ self esGrafoAciclico.
+
+OrdenTopologico >> esGrafoAciclico
+	| estado |
+	estado := Dictionary new.
+	vertices do: [:v | estado at: v put: #sinVisitar].
+	vertices do: [:v |
+		((estado at: v) = #sinVisitar and: [self dfsAciclico: v estado: estado]) ifFalse: [
+			((estado at: v) = #enProceso) ifTrue: [^ false]]].
+	^ true.
+
+OrdenTopologico >> dfsAciclico: vertice estado: estado
+	| marca |
+	marca := estado at: vertice.
+	marca = #enProceso ifTrue: [^ false].
+	marca = #visitado ifTrue: [^ true].
+	estado at: vertice put: #enProceso.
+	((adyacencias at: vertice ifAbsent: [#()]) allSatisfy: [:vecino |
+		self dfsAciclico: vecino estado: estado]) ifFalse: [^ false].
+	estado at: vertice put: #visitado.
+	^ true.
+
+OrdenTopologico >> vertices
+	^ vertices copy.
+
+OrdenTopologico >> adyacencias
+	^ adyacencias copy.

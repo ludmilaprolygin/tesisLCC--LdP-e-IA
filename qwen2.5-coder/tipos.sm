@@ -1,0 +1,10 @@
+precioFinalConDescuento: precioString conDescuentoString: descuentoString
+
+    | precio descuento |
+    
+    precio := precioString asNumber.
+    descuento := descuentoString asNumber.
+
+    ^precio - (precio * descuento / 100)
+
+precioFinalConDescuento: '50' conDescuentoString: '10'

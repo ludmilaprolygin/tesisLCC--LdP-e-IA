@@ -1,0 +1,45 @@
+esOrdenTopologico: grafo orden: orden
+    | nodos posicion |
+
+    nodos := Set new.
+
+    "Recolectar todos los nodos"
+    grafo keysAndValuesDo: [ :nodo :vecinos |
+        nodos add: nodo.
+        vecinos do: [ :vecino | nodos add: vecino ].
+    ].
+
+    "Verificar que el orden tenga exactamente los mismos nodos"
+    (orden asSet = nodos) ifFalse: [ ^false ].
+
+    "Guardar la posición de cada nodo en el orden"
+    posicion := Dictionary new.
+
+    orden withIndexDo: [ :nodo :indice |
+        posicion at: nodo put: indice.
+    ].
+
+    "Verificar cada arco u -> v"
+    grafo keysAndValuesDo: [ :u :vecinos |
+        vecinos do: [ :v |
+            ((posicion at: u) >= (posicion at: v))
+                ifTrue: [ ^false ].
+        ].
+    ].
+
+    ^true
+
+| grafo orden1 orden2 |
+
+grafo := Dictionary new.
+grafo at: #A put: #(C).
+grafo at: #B put: #(C D).
+grafo at: #C put: #(E).
+grafo at: #D put: #(E).
+grafo at: #E put: #().
+
+orden1 := #(A B C D E).
+orden2 := #(C A B D E).
+
+Transcript show: (self esOrdenTopologico: grafo orden: orden1) printString; cr.
+Transcript show: (self esOrdenTopologico: grafo orden: orden2) printString; cr.

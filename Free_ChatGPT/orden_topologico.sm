@@ -1,0 +1,60 @@
+Object subclass: #Grafo
+    instanceVariableNames: 'vertices ady'
+    classVariableNames: ''
+    package: 'Grafos'.
+
+"Grafo dirigido"
+
+Grafo >> initializeCon: n
+    vertices := n.
+    ady := Array new: vertices.
+    
+    1 to: vertices do: [:i |
+        ady at: i put: OrderedCollection new
+    ].
+
+Grafo >> agregarAristaDesde: u hacia: v
+    ((ady at: u) add: v).
+
+Grafo >> esOrdenTopologico: orden
+    | posiciones |
+
+    "Debe tener todos los vértices"
+    (orden size = vertices) ifFalse: [ ^ false ].
+
+    posiciones := Dictionary new.
+
+    "Guardar posición de cada nodo"
+    1 to: orden size do: [:i |
+        posiciones at: (orden at: i) put: i
+    ].
+
+    "Verificar cada arista u -> v"
+    1 to: vertices do: [:u |
+        (ady at: u) do: [:v |
+            ((posiciones at: u) > (posiciones at: v))
+                ifTrue: [ ^ false ].
+        ].
+    ].
+
+    ^ true.
+
+| g orden1 orden2 orden3 |
+
+g := Grafo new.
+g initializeCon: 6.
+
+g agregarAristaDesde: 6 hacia: 3.
+g agregarAristaDesde: 6 hacia: 1.
+g agregarAristaDesde: 5 hacia: 1.
+g agregarAristaDesde: 5 hacia: 2.
+g agregarAristaDesde: 3 hacia: 4.
+g agregarAristaDesde: 4 hacia: 2.
+
+orden1 := #(6 5 3 4 2 1).
+orden2 := #(5 6 3 4 1 2).
+orden3 := #(6 5 4 3 2 1).
+
+Transcript show: (g esOrdenTopologico: orden1) printString; cr.
+Transcript show: (g esOrdenTopologico: orden2) printString; cr.
+Transcript show: (g esOrdenTopologico: orden3) printString; cr.

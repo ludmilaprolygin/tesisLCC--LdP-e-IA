@@ -1,0 +1,43 @@
+:- dynamic visitado/1.
+:- dynamic ordenTopologico/1.
+
+% Inicializar los predicados dinámicos para el grafo
+inicializar :-
+    retractall(visitado(_)),
+    retractall(ordenTopologico(_)).
+
+% Definir un vértice como no visitado
+noVisitado(V) :- \+ visitado(V).
+
+% Marcar un vértice como visitado
+marcarComoVisitado(V) :- asserta(visitado(V)).
+
+% Función recursiva para realizar el orden topológico utilizando DFS
+ordenTopologicoDFS(Nodo, Visitados) :-
+    noVisitado(Nodo),
+    marcarComoVisitado(Nodo),
+    findall(Sucesor, sucesores(Nodo, Sucesor), Sucesores),
+    maplist(ordenTopologicoDFS, Sucesores, []),
+    append(Visitados, [Nodo], NuevosVisitados),
+    asserta(ordenTopologico(NuevosVisitados)).
+
+% Implementar el orden topológico principal
+ordenTopologico :- 
+    inicializar,
+    findall(V, vertice(V), Vertices),
+    maplist(ordenTopologicoDFS, Vertices, []),
+    findall(Camino, ordenTopologico(Camino), Resultado),
+    writeln(Resultado).
+
+% Definir un ejemplo de grafo
+vértice(a).
+vértice(b).
+vértice(c).
+vértice(d).
+vértice(e).
+
+sucesores(a, b).
+sucesores(a, c).
+sucesores(b, d).
+sucesores(c, d).
+sucesores(d, e).
