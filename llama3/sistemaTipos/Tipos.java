@@ -1,3 +1,4 @@
+package llama3.sistemaTipos;
 public class Tipos {
     public static void main(String[] args) {
         double price = 50;

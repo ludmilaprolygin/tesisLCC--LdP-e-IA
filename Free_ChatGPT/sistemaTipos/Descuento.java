@@ -1,3 +1,4 @@
+package sistemaTipos;
 public class Descuento {
 
     public static double precioFinal(double precio, String descuento) {

@@ -1,3 +1,4 @@
+package sistemaTipos;
 public class Descuento {
 
     public static double calcularPrecioFinal(double precio, double descuento) {
