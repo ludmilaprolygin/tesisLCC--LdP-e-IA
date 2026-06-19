@@ -1,0 +1,15 @@
+% Predicado principal que calcula el precio promedio de productos mayores al umbral
+precio_promedio_mayores_a_umbral(Precios, Umbral, Promedio) :-
+    % Filtra la lista para obtener solo los precios mayores al umbral
+    findall(Precio, (member(Precio, Precios), Precio > Umbral), PreciosMayores),
+    
+    % Calcula el número de elementos en la lista filtrada
+    length(PreciosMayores, Cantidad),
+    
+    % Si no hay elementos mayores al umbral o la lista está vacía, retorna 0
+    (   Cantidad =:= 0 -> Promedio = 0 ;
+        % Suma todos los precios mayores al umbral
+        sum_list(PreciosMayores, Suma),
+        % Calcula el promedio dividiendo la suma por la cantidad de elementos
+        Promedio is Suma / Cantidad
+    ).

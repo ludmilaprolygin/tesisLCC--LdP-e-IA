@@ -1,0 +1,25 @@
+promedio_mayores(Precios, Umbral, Promedio) :-
+    promedio_mayores_aux(Precios, Umbral, 0, 0, Promedio).
+
+promedio_mayores_aux([], _, Suma, Cantidad, Promedio) :-
+    (Cantidad =:= 0 ->
+        Promedio = 0
+    ;
+        Promedio is Suma / Cantidad
+    ).
+
+promedio_mayores_aux([Precio|Resto], Umbral, Suma, Cantidad, Promedio) :-
+    (Precio > Umbral ->
+        NuevaSuma is Suma + Precio,
+        NuevaCantidad is Cantidad + 1
+    ;
+        NuevaSuma = Suma,
+        NuevaCantidad = Cantidad
+    ),
+    promedio_mayores_aux(
+        Resto,
+        Umbral,
+        NuevaSuma,
+        NuevaCantidad,
+        Promedio
+    ).

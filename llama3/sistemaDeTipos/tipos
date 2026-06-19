@@ -1,0 +1,12 @@
+precio_promedio([], _, 0).
+precio_promedio([P|Ps], Umbral, Resultado) :-
+    (
+        P > Umbral,
+        sum_list(maplist(>=, Umbral), L),
+        length(L, Contador),
+        Resultado is P + (PrecioPromedio(Ps, Umbral, PP) * Contador)
+    ; true
+    ),
+    precio_promedio(Ps, Umbral, Resultado).
+
+precio_promedio([], _, 0).

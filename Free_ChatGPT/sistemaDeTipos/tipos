@@ -1,0 +1,23 @@
+% promedio_mayores(+Precios, +Umbral, -Promedio)
+
+promedio_mayores([], _, 0).
+
+promedio_mayores(Precios, Umbral, Promedio) :-
+    sumar_y_contar(Precios, Umbral, Suma, Cantidad),
+    ( Cantidad =:= 0 ->
+        Promedio = 0
+    ;
+        Promedio is Suma / Cantidad
+    ).
+
+sumar_y_contar([], _, 0, 0).
+
+sumar_y_contar([P|Ps], Umbral, Suma, Cantidad) :-
+    sumar_y_contar(Ps, Umbral, SumaResto, CantidadResto),
+    ( P > Umbral ->
+        Suma is SumaResto + P,
+        Cantidad is CantidadResto + 1
+    ;
+        Suma = SumaResto,
+        Cantidad = CantidadResto
+    ).
