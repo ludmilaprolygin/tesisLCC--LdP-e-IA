@@ -1,0 +1,23 @@
+Object subclass: PrecioPromedio [
+  PrecioPromedio class >> calcularCon: precios umbral: umbral [
+    | suma cantidad |
+    suma := cantidad := 0.
+    
+    precios do: [:precio |
+      precio > umbral ifTrue: [
+        suma := suma + precio.
+        cantidad := cantidad + 1
+      ]
+    ].
+    
+    ^cantidad = 0 ifFalse: [suma / cantidad] ifTrue: [0]
+  ]
+]
+
+"Uso de la clase PrecioPromedio"
+| precios umbral resultado |
+precios := #(10 20 30 40 50).
+umbral := 25.
+resultado := PrecioPromedio calcularCon: precios umbral: umbral.
+
+Transcript show: 'El precio promedio es: ', resultado printString, Character cr.

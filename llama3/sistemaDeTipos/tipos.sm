@@ -1,0 +1,14 @@
+|sum count|
+sum := 0.
+count := 0.
+
+thresholdPrice := umbral. "Variable de instancia que almacena el umbral"
+
+prices do: [:price |
+    price > thresholdPrice ifTrue: [
+        sum := sum + price.
+        count := count + 1
+    ]
+].
+
+^ (count = 0) ifTrue: [0] ifFalse: [sum / count]

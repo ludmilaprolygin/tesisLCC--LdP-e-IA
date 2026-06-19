@@ -1,0 +1,25 @@
+| promedioMayoresQue precios |
+
+promedioMayoresQue := [:precios :umbral |
+    | suma cantidad |
+
+    suma := 0.
+    cantidad := 0.
+
+    precios do: [:precio |
+        precio > umbral ifTrue: [
+            suma := suma + precio.
+            cantidad := cantidad + 1
+        ]
+    ].
+
+    cantidad = 0
+        ifTrue: [0]
+        ifFalse: [suma / cantidad]
+].
+
+precios := #(10 20 30 40).
+
+Transcript show: (promedioMayoresQue value: precios value: 25) printString; cr.
+Transcript show: (promedioMayoresQue value: precios value: 50) printString; cr.
+Transcript show: precios printString; cr.
