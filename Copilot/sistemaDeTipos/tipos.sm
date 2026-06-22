@@ -1,0 +1,18 @@
+averageOfPricesAbove: prices threshold: threshold
+    | sum count |
+    sum := 0.
+    count := 0.
+
+    prices do: [ :price |
+        price > threshold ifTrue: [
+            sum := sum + price.
+            count := count + 1 ] ].
+
+    ^ count = 0
+        ifTrue: [ 0 ]
+        ifFalse: [ sum asFloat / count asFloat ]
+
+| prices result |
+prices := #(10 20 30 40 50).
+result := self averageOfPricesAbove: prices threshold: 25.
+Transcript show: result printString; cr.

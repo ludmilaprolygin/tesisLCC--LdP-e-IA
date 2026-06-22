@@ -1,0 +1,16 @@
+promedio_mayores_a_umbral(Precios, Umbral, Promedio) :-
+    promedio_mayores_a_umbral_(Precios, Umbral, 0.0, 0, Suma, Cantidad),
+    (   Cantidad =:= 0
+    ->  Promedio = 0
+    ;   Promedio is Suma / Cantidad
+    ).
+
+promedio_mayores_a_umbral_([], _, Suma, Cantidad, Suma, Cantidad).
+promedio_mayores_a_umbral_([Precio|Resto], Umbral, Suma0, Cant0, Suma, Cantidad) :-
+    (   Precio > Umbral
+    ->  Suma1 is Suma0 + Precio,
+        Cant1 is Cant0 + 1
+    ;   Suma1 = Suma0,
+        Cant1 = Cant0
+    ),
+    promedio_mayores_a_umbral_(Resto, Umbral, Suma1, Cant1, Suma, Cantidad).
