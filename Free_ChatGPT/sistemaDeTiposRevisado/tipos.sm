@@ -1,0 +1,48 @@
+promedioMayores: unaColeccion umbral: unUmbral
+	| suma cantidad valor |
+	
+	suma := 0.
+	cantidad := 0.
+
+	unaColeccion do: [:elemento |
+		valor := self convertirANumero: elemento.
+
+		valor > unUmbral ifTrue: [
+			suma := suma + valor.
+			cantidad := cantidad + 1.
+		].
+	].
+
+	^ cantidad = 0
+		ifTrue: [ 0 ]
+		 "Nothing more expected ->"ifFalse: [ suma / cantidad ]
+		
+convertirANumero: unObjeto
+
+	unObjeto isInteger ifTrue: [
+		^ unObjeto asFloat
+	].
+
+	unObjeto isFloat ifTrue: [
+		^ unObjeto
+	].
+
+	unObjeto isCharacter ifTrue: [
+		^ unObjeto asString asNumber
+	].
+
+	unObjeto isString ifTrue: [
+		^ unObjeto asNumber
+	].
+
+	self error: 'Tipo no soportado'
+	
+| precios promedio |
+
+precios := #(10 30.0 $2 '40' '50').
+
+promedio := self
+				promedioMayores: precios
+				 "Nothing more expected ->"umbral: 25.
+
+Transcript show: promedio printString.

@@ -1,0 +1,31 @@
+promedio_mayores_a_umbral(Lista, Umbral, Promedio) :-
+    promedio_mayores_a_umbral_(Lista, Umbral, 0.0, 0, Suma, Cantidad),
+    (   Cantidad =:= 0
+    ->  Promedio = 0
+    ;   Promedio is Suma / Cantidad
+    ).
+
+promedio_mayores_a_umbral_([], _, Suma, Cantidad, Suma, Cantidad).
+promedio_mayores_a_umbral_([X | Resto], Umbral, Suma0, Cant0, Suma, Cantidad) :-
+    valor_numerico(X, Numero),
+    (   Numero > Umbral
+    ->  Suma1 is Suma0 + Numero,
+        Cant1 is Cant0 + 1
+    ;   Suma1 = Suma0,
+        Cant1 = Cant0
+    ),
+    promedio_mayores_a_umbral_(Resto, Umbral, Suma1, Cant1, Suma, Cantidad).
+
+valor_numerico(X, X) :-
+    number(X),
+    !.
+
+valor_numerico(X, Numero) :-
+    string(X),
+    !,
+    number_string(Numero, X).
+
+valor_numerico(X, Numero) :-
+    atom(X),
+    !,
+    atom_number(X, Numero).

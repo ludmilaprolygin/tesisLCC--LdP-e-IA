@@ -1,0 +1,33 @@
+% Conversión a número
+convertir(int(X), X).
+convertir(float(X), X).
+convertir(char(C), N) :-
+    char_code(C, Codigo),
+    N is Codigo - 0'0.
+convertir(string(S), N) :-
+    number_string(N, S).
+
+% Predicado principal
+promedio_mayores(Lista, Umbral, Promedio) :-
+    convertir(Umbral, UmbralNum),
+    acumular(Lista, UmbralNum, 0, 0, Suma, Cantidad),
+    ( Cantidad =:= 0 ->
+        Promedio = 0
+    ;
+        Promedio is Suma / Cantidad
+    ).
+
+% Caso base
+acumular([], _, Suma, Cantidad, Suma, Cantidad).
+
+% Caso recursivo
+acumular([X|Xs], Umbral, Suma0, Cant0, Suma, Cant) :-
+    convertir(X, Valor),
+    ( Valor > Umbral ->
+        Suma1 is Suma0 + Valor,
+        Cant1 is Cant0 + 1
+    ;
+        Suma1 = Suma0,
+        Cant1 = Cant0
+    ),
+    acumular(Xs, Umbral, Suma1, Cant1, Suma, Cant).

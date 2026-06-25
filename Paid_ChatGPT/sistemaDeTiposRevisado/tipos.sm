@@ -1,0 +1,37 @@
+promedioMayoresAUmbral: unaColeccion umbral: unUmbral
+    | suma cantidad umbralNumero |
+
+    suma := 0.
+    cantidad := 0.
+
+    umbralNumero := self convertirANumero: unUmbral.
+
+    unaColeccion do: [:elemento |
+        | valor |
+        valor := self convertirANumero: elemento.
+
+        valor > umbralNumero ifTrue: [
+            suma := suma + valor.
+            cantidad := cantidad + 1.
+        ].
+    ].
+
+    ^ cantidad = 0
+        ifTrue: [0]
+        ifFalse: [suma / cantidad]
+
+
+convertirANumero: unValor
+    (unValor isKindOf: Number) ifTrue: [
+        ^ unValor asFloat
+    ].
+
+    (unValor isKindOf: Character) ifTrue: [
+        ^ (unValor digitValue) asFloat
+    ].
+
+    (unValor isKindOf: String) ifTrue: [
+        ^ unValor asNumber asFloat
+    ].
+
+    self error: 'Tipo no soportado'

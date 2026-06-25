@@ -1,0 +1,33 @@
+promedio_mayores(Lista, Umbral, Promedio) :-
+    sumar_y_contar(Lista, Umbral, 0, 0, Suma, Cantidad),
+    ( Cantidad =:= 0 ->
+        Promedio = 0
+    ;
+        Promedio is Suma / Cantidad
+    ).
+
+sumar_y_contar([], _, Suma, Cantidad, Suma, Cantidad).
+
+sumar_y_contar([X|Xs], Umbral, Suma0, Cant0, Suma, Cant) :-
+    a_numero(X, Valor),
+    ( Valor > Umbral ->
+        Suma1 is Suma0 + Valor,
+        Cant1 is Cant0 + 1
+    ;
+        Suma1 = Suma0,
+        Cant1 = Cant0
+    ),
+    sumar_y_contar(Xs, Umbral, Suma1, Cant1, Suma, Cant).
+
+% Conversión de tipos
+
+a_numero(X, X) :-
+    number(X).
+
+a_numero(X, N) :-
+    atom(X),
+    atom_number(X, N).
+
+a_numero(X, N) :-
+    string(X),
+    number_string(N, X).

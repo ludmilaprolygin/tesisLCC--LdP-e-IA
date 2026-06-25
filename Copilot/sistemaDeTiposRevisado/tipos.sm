@@ -1,0 +1,36 @@
+Object subclass: #PriceUtils
+    instanceVariableNames: ''
+    classVariableNames: ''
+    poolDictionaries: ''
+    category: 'Examples'.
+
+PriceUtils class >> averageOfValues: values above: threshold
+    | sum count |
+    sum := 0.
+    count := 0.
+
+    values do: [ :value |
+        | number |
+        number := self numberFromValue: value.
+        number > threshold ifTrue: [
+            sum := sum + number.
+            count := count + 1 ] ].
+
+    ^ count = 0
+        ifTrue: [ 0 ]
+        ifFalse: [ sum asFloat / count asFloat ]
+
+
+PriceUtils class >> numberFromValue: value
+    value isNumber ifTrue: [ ^ value asFloat ].
+
+    value isCharacter ifTrue: [ ^ value digitValue asFloat ].
+
+    value isString ifTrue: [ ^ value asNumber asFloat ].
+
+    self error: 'Unsupported value type'
+
+| values result |
+values := { 1. 2.5. $5. '10' }.
+result := PriceUtils averageOfValues: values above: 3.
+Transcript show: result printString; cr.
