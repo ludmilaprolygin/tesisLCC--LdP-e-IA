@@ -1,6 +1,0 @@
-precioFinal: precio descuento: descuentoString
-    | descuento |
-    descuento := descuentoString asNumber.
-    ^ precio * (1 - (descuento / 100))
-
-self precioFinal: 50 descuento: '10'

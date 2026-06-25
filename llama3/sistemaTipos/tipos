@@ -1,5 +1,0 @@
-descuento(Precio, Descuento, Resultado) :-
-    atom_number(Descuento, Porcentaje),
-    Resultado is Precio * (1 - Porcentaje / 100).
-
-?- descuento(50, "10", Resultado).

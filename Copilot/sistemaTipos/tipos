@@ -1,6 +1,0 @@
-precio_final(Precio, DescuentoTexto, PrecioFinal) :-
-	number_string(Descuento, DescuentoTexto),
-	PrecioFinal is Precio - (Precio * Descuento / 100).
-
-% Consulta de ejemplo:
-% ?- precio_final(50, "10", PrecioFinal).
