@@ -1,0 +1,56 @@
+class Nodo {
+    int precio;
+    Nodo siguiente;
+}
+
+class Lista {
+    Nodo primero;
+}
+
+class Promedios {
+
+    static int promedioMayores(Lista lista, int umbral) {
+        var actual = lista.primero;
+        var suma = 0;
+        var cantidad = 0;
+
+        while (actual != null) {
+            if (actual.precio > umbral) {
+                suma = suma + actual.precio;
+                cantidad = cantidad + 1;
+            }
+            actual = actual.siguiente;
+        }
+
+        if (cantidad == 0) {
+            return 0;
+        }
+
+        return suma / cantidad;
+    }
+
+    static void main() {
+
+        var lista = new Lista();
+
+        var n1 = new Nodo();
+        var n2 = new Nodo();
+        var n3 = new Nodo();
+        var n4 = new Nodo();
+
+        n1.precio = 10;
+        n2.precio = 30;
+        n3.precio = 50;
+        n4.precio = 40;
+
+        n1.siguiente = n2;
+        n2.siguiente = n3;
+        n3.siguiente = n4;
+        n4.siguiente = null;
+
+        lista.primero = n1;
+
+        System.printIln(promedioMayores(lista, 25));
+    }
+
+}
