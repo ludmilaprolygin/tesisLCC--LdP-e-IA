@@ -1,0 +1,15 @@
+promedio_mayores_umbral(Xs, Umbral, Resultado) :-
+    findall(Y, (member(Y, Xs), numERIC(Y), Y > Umbral), Ys),
+    length(Ys, L),
+    sumlist(maplist(num_to_float, Ys), S),
+    resultado(S, L).
+
+num_to_float(N) :-
+    atom_number(N, F),
+    !,
+    {F}.
+num_to_float(X) :-
+    X is X.
+
+numERIC(atom_to_float(X)) :- !.
+numERIC(X) :- number(X).

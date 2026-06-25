@@ -1,0 +1,32 @@
+average_above_threshold(Numbers, Threshold, Average) :-
+    % Filtra y convierte a números solo los elementos válidos
+    filter_and_convert(Numbers, ValidNumbers),
+    % Calcula la suma de los valores mayores al umbral
+    sum_above_threshold(ValidNumbers, Threshold, Sum, Count),
+    % Calcula el promedio (si se ha encontrado algún valor)
+    (Count > 0 -> Average is Sum / Count ; Average = 0).
+
+% Filtra y convierte a números solo los elementos válidos
+filter_and_convert([], []).
+filter_and_convert([H|T], [N|NT]) :-
+    convert_to_number(H, N),
+    filter_and_convert(T, NT).
+
+% Convierte un elemento a número si es válido (int, float, char o string representando un número)
+convert_to_number(X, N) :-
+    number(X), !,
+    N = X.
+convert_to_number(X, N) :-
+    string(X), !,
+    number_string(NumberStr, X),
+    number(NumberStr), !,
+    N = NumberStr.
+
+% Calcula la suma de los valores mayores al umbral y cuenta cuántos hay
+sum_above_threshold([], _, 0, 0).
+sum_above_threshold([H|T], Threshold, Sum, Count) :-
+    H > Threshold -> 
+        sum_above_threshold(T, Threshold, Sum1, Count1),
+        Sum is Sum1 + H,
+        Count is Count1 + 1 ;
+    sum_above_threshold(T, Threshold, Sum, Count).

@@ -1,0 +1,19 @@
+| medianValues |
+medianValues := OrderedCollection new.
+self convertAndFilter: anArray with: threshold do: [:each | 
+    | value |
+    value := each asFloat.
+    value > threshold ifTrue: [medianValues add: value]].
+^ medianValues size = 0
+    ifTrue: [nil]
+    ifFalse: [medianValues sum / medianValues size].
+
+| valores resultado |
+
+valores := #(1 2.5 $5 '10' '3').
+
+resultado := self
+    promedioMayoresAUmbral: valores
+    umbral: 3.
+
+Transcript show: resultado printString; cr.

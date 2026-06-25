@@ -1,0 +1,32 @@
+Object subclass: PromediosMayorUmbral [
+    PromediosMayorUmbral class >> calcularPromedioMayoresA: umbral en: arreglo [
+        | valoresNumericos |
+
+        "Filtrar solo los valores numéricos"
+        valoresNumericos := arreglo select: [ :elemento |
+            (elemento isKindOf: Integer) or: [ elemento isKindOf: Float ].
+        ].
+
+        "Convertir los elementos string a números si es necesario"
+        valoresNumericos := valoresNumericos collect: [ :numero |
+            numero isString ifTrue: [
+                ((numero allSatisfy: [:c | c isDigit]) 
+                    ifTrue: [numero asInteger] 
+                    ifFalse: [Float readFromString: numero])
+            ] ifFalse: [numero].
+        ].
+
+        "Calcular el promedio si hay elementos numéricos"
+        (valoresNumericos size = 0) ifTrue: [
+            ^nil "No se puede calcular el promedio de un conjunto vacío".
+        ].
+        
+        ^valoresNumericos sum / valoresNumericos size
+    ]
+]
+
+"Uso del método"
+| resultado |
+
+resultado := PromediosMayorUmbral calcularPromedioMayoresA: 5 en: {3.2 . '6' . 'hola' . 8 . 10}.
+Transcript show: 'El promedio es: ', resultado printString.
