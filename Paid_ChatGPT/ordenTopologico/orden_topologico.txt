@@ -1,0 +1,73 @@
+class IntList {
+    int value;
+    IntList next;
+
+    public IntList(int v, IntList n) {
+        value = v;
+        next = n;
+    }
+}
+
+class Edge {
+    int from;
+    int to;
+    Edge next;
+
+    public Edge(int f, int t, Edge n) {
+        from = f;
+        to = t;
+        next = n;
+    }
+}
+
+class TopologicalRecognizer {
+
+    static int positionOf(IntList order, int x) {
+        var pos = 0;
+        var current = order;
+
+        while (current != null) {
+            if (current.value == x) {
+                return pos;
+            }
+            current = current.next;
+            pos = pos + 1;
+        }
+
+        return -1;
+    }
+
+    static boolean isTopologicalOrder(IntList order, Edge edges) {
+        var current = edges;
+
+        while (current != null) {
+            var posFrom = TopologicalRecognizer.positionOf(order, current.from);
+            var posTo = TopologicalRecognizer.positionOf(order, current.to);
+
+            if (posFrom == -1 || posTo == -1) {
+                return false;
+            }
+
+            if (posFrom >= posTo) {
+                return false;
+            }
+
+            current = current.next;
+        }
+
+        return true;
+    }
+
+    static void start() {
+        var order = new IntList(1, new IntList(2, new IntList(3, new IntList(4, null))));
+
+        var edges = new Edge(1, 2,
+                    new Edge(1, 3,
+                    new Edge(2, 4,
+                    new Edge(3, 4, null))));
+
+        var result = TopologicalRecognizer.isTopologicalOrder(order, edges);
+
+        System.printBln(result);
+    }
+}

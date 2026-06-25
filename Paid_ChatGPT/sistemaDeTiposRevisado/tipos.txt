@@ -1,0 +1,110 @@
+abstract class NumericValue {
+    abstract int asInt();
+}
+
+class IntValue extends NumericValue {
+    int value;
+
+    public IntValue(int v) {
+        value = v;
+    }
+
+    int asInt() {
+        return value;
+    }
+}
+
+class CharValue extends NumericValue {
+    char value;
+
+    public CharValue(char v) {
+        value = v;
+    }
+
+    int asInt() {
+        if (value == '0') return 0;
+        if (value == '1') return 1;
+        if (value == '2') return 2;
+        if (value == '3') return 3;
+        if (value == '4') return 4;
+        if (value == '5') return 5;
+        if (value == '6') return 6;
+        if (value == '7') return 7;
+        if (value == '8') return 8;
+        return 9;
+    }
+}
+
+/* Representa un string numérico ya normalizado,
+   porque MiniJava no provee parseInt ni métodos sobre String. */
+class StringValue extends NumericValue {
+    int numericValue;
+
+    public StringValue(int v) {
+        numericValue = v;
+    }
+
+    int asInt() {
+        return numericValue;
+    }
+}
+
+/* Representa un float como entero escalado.
+   Ejemplo: 12.50 se representa como 1250. */
+class FloatValue extends NumericValue {
+    int scaledValue;
+
+    public FloatValue(int v) {
+        scaledValue = v;
+    }
+
+    int asInt() {
+        return scaledValue;
+    }
+}
+
+class PriceNode {
+    NumericValue value;
+    PriceNode next;
+
+    public PriceNode(NumericValue v, PriceNode n) {
+        value = v;
+        next = n;
+    }
+}
+
+class PriceUtils {
+
+    static int averageGreaterThan(PriceNode prices, int threshold) {
+        var current = prices;
+        var sum = 0;
+        var count = 0;
+
+        while (current != null) {
+            var numericPrice = current.value.asInt();
+
+            if (numericPrice > threshold) {
+                sum = sum + numericPrice;
+                count = count + 1;
+            }
+
+            current = current.next;
+        }
+
+        if (count == 0) {
+            return 0;
+        }
+
+        return sum / count;
+    }
+
+    static void start() {
+        var prices =
+            new PriceNode(new IntValue(100),
+            new PriceNode(new CharValue('8'),
+            new PriceNode(new StringValue(250),
+            new PriceNode(new FloatValue(300), null))));
+
+        System.printIln(PriceUtils.averageGreaterThan(prices, 90));
+    }
+}

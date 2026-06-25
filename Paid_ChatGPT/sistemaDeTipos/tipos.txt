@@ -1,0 +1,42 @@
+class PriceNode {
+    int price;
+    PriceNode next;
+
+    public PriceNode(int p, PriceNode n) {
+        price = p;
+        next = n;
+    }
+}
+
+class PriceUtils {
+
+    static int averageGreaterThan(PriceNode prices, int threshold) {
+        var current = prices;
+        var sum = 0;
+        var count = 0;
+
+        while (current != null) {
+            if (current.price > threshold) {
+                sum = sum + current.price;
+                count = count + 1;
+            }
+            current = current.next;
+        }
+
+        if (count == 0) {
+            return 0;
+        }
+
+        return sum / count;
+    }
+
+    static void start() {
+        var prices =
+            new PriceNode(100,
+            new PriceNode(250,
+            new PriceNode(300,
+            new PriceNode(80, null))));
+
+        System.printIln(PriceUtils.averageGreaterThan(prices, 150));
+    }
+}
