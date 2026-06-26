@@ -1,0 +1,198 @@
+class Vertex {
+    int id;
+    int indegree;
+    Vertex next;
+    Edge edges;
+
+    public Vertex(int value) {
+        id = value;
+        indegree = 0;
+        next = null;
+        edges = null;
+    }
+}
+
+class Edge {
+    Vertex to;
+    Edge next;
+
+    public Edge(Vertex destination, Edge following) {
+        to = destination;
+        next = following;
+    }
+}
+
+class QueueNode {
+    Vertex value;
+    QueueNode next;
+
+    public QueueNode(Vertex v) {
+        value = v;
+        next = null;
+    }
+}
+
+class Queue {
+    QueueNode first;
+    QueueNode last;
+
+    public Queue() {
+        first = null;
+        last = null;
+    }
+
+    void enqueue(Vertex v) {
+        QueueNode node;
+        node = new QueueNode(v);
+
+        if (first == null) {
+            first = node;
+            last = node;
+        } else {
+            last.next = node;
+            last = node;
+        }
+    }
+
+    Vertex dequeue() {
+        Vertex value;
+        QueueNode node;
+
+        node = first;
+        value = node.value;
+        first = first.next;
+
+        if (first == null) {
+            last = null;
+        }
+
+        return value;
+    }
+
+    boolean isEmpty() {
+        return first == null;
+    }
+}
+
+class Graph {
+    Vertex vertices;
+
+    public Graph() {
+        vertices = null;
+    }
+
+    Vertex findVertex(int id) {
+        Vertex current;
+        current = vertices;
+
+        while (current != null) {
+            if (current.id == id) {
+                return current;
+            }
+            current = current.next;
+        }
+
+        return null;
+    }
+
+    Vertex addVertex(int id) {
+        Vertex vertex;
+        vertex = findVertex(id);
+
+        if (vertex == null) {
+            vertex = new Vertex(id);
+            vertex.next = vertices;
+            vertices = vertex;
+        }
+
+        return vertex;
+    }
+
+    void addEdge(int from, int to) {
+        Vertex source;
+        Vertex target;
+        Edge edge;
+
+        source = addVertex(from);
+        target = addVertex(to);
+
+        edge = new Edge(target, source.edges);
+        source.edges = edge;
+        target.indegree = target.indegree + 1;
+    }
+
+    int vertexCount() {
+        Vertex current;
+        int count;
+
+        current = vertices;
+        count = 0;
+
+        while (current != null) {
+            count = count + 1;
+            current = current.next;
+        }
+
+        return count;
+    }
+
+    void topologicalSort() {
+        Queue queue;
+        Vertex current;
+        Vertex vertex;
+        Edge edge;
+        int processed;
+        int total;
+
+        queue = new Queue();
+        current = vertices;
+        total = vertexCount();
+
+        while (current != null) {
+            if (current.indegree == 0) {
+                queue.enqueue(current);
+            }
+            current = current.next;
+        }
+
+        processed = 0;
+
+        while (queue.isEmpty() == false) {
+            vertex = queue.dequeue();
+            System.printIln(vertex.id);
+            processed = processed + 1;
+
+            edge = vertex.edges;
+            while (edge != null) {
+                edge.to.indegree = edge.to.indegree - 1;
+
+                if (edge.to.indegree == 0) {
+                    queue.enqueue(edge.to);
+                }
+
+                edge = edge.next;
+            }
+        }
+
+        if (processed != total) {
+            System.printSln("El grafo tiene un ciclo, no existe orden topologico.");
+        }
+    }
+}
+
+class Main {
+    static void main() {
+        Graph g;
+
+        g = new Graph();
+
+        g.addEdge(5, 2);
+        g.addEdge(5, 0);
+        g.addEdge(4, 0);
+        g.addEdge(4, 1);
+        g.addEdge(2, 3);
+        g.addEdge(3, 1);
+
+        g.topologicalSort();
+    }
+}

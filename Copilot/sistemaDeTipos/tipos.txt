@@ -1,0 +1,51 @@
+class PriceNode {
+    int value;
+    PriceNode next;
+
+    public PriceNode(int v, PriceNode n) {
+        value = v;
+        next = n;
+    }
+}
+
+class Stats {
+
+    static int averageAboveThreshold(PriceNode prices, int threshold) {
+        int sum;
+        int count;
+        PriceNode current;
+
+        sum = 0;
+        count = 0;
+        current = prices;
+
+        while (current != null) {
+            if (current.value > threshold) {
+                sum = sum + current.value;
+                count = count + 1;
+            }
+            current = current.next;
+        }
+
+        if (count == 0) {
+            return 0;
+        }
+
+        return sum / count;
+    }
+}
+
+class Main {
+    static void main() {
+        PriceNode prices;
+        int result;
+
+        prices = new PriceNode(10,
+                 new PriceNode(25,
+                 new PriceNode(7,
+                 new PriceNode(40, null))));
+
+        result = Stats.averageAboveThreshold(prices, 15);
+        System.printIln(result);
+    }
+}
