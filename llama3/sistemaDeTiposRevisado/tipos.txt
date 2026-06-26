@@ -1,0 +1,18 @@
+public class MiniJava {
+    public static void main(String[] args) {
+        int[] arr = {1, 2.0f, 'c', "hello"};
+        
+        // Evaluamos las expresiones en el arreglo de entrada
+        for (int i : arr) {
+            if (i instanceof Integer) {
+                System.out.println("Entero: " + i);
+            } else if (i instanceof Float) {
+                System.out.println("Flotante: " + i);
+            } else if (i instanceof Character) {
+                System.out.println("Caracter: " + ((Character) i).toString());
+            } else if (i instanceof String) {
+                System.out.println("Cadena de texto: " + (String) i);
+            }
+        }
+    }
+}

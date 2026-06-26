@@ -1,0 +1,36 @@
+class Main {
+    static int sumaAbsolutos(int[] arr) {
+        // Inicializamos la suma en 0
+        float suma = 0.0f;
+
+        // Recorremos todos los elementos del arreglo
+        for (int i = 0; i < arr.length; i++) {
+            // Convertimos el elemento a tipo float
+            float valor = convertirATipoFloat(arr[i]);
+
+            // Sumamos el valor absoluto al total
+            suma += Math.abs(valor);
+        }
+
+        // Redondeamos el resultado final a int y lo devolvemos
+        return (int) suma;
+    }
+
+    static float convertirATipoFloat(int arr[]) {
+        for(int i=0; i<arr.length; i++){
+            if(arr[i] instanceof Integer){
+                arr[i]=((Integer)arr[i]).intValue();
+            } else if(arr[i] instanceof Float){
+                arr[i]=((Float)arr[i]).floatValue();
+            } else if(arr[i] instanceof Character){
+                arr[i]=((Character)arr[i]).charValue();
+            }
+        }
+        return 0.0f;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3};
+        System.out.println(sumaAbsolutos(arr)); // Salida: 6
+    }
+}

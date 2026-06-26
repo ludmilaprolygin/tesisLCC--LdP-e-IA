@@ -1,0 +1,13 @@
+public double promedioPreciosMásAltos(double[] precios, double umbral) {
+    int count = 0; // Contador de productos que superan el umbral
+    double suma = 0; // Suma de los precios de los productos que superan el umbral
+
+    for (double precio : precios) {
+        if (precio > umbral) {
+            suma += precio;
+            count++;
+        }
+    }
+
+    return count == 0 ? 0 : suma / count;
+}

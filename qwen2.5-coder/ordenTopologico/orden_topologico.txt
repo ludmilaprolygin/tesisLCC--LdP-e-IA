@@ -1,0 +1,105 @@
+class Node {
+    int id;
+    List<Node> neighbors;
+
+    public Node(int id) {
+        this.id = id;
+        this.neighbors = new ArrayList<>();
+    }
+
+    public void addNeighbor(Node neighbor) {
+        this.neighbors.add(neighbor);
+    }
+}
+
+class Graph {
+    List<Node> nodes;
+
+    public Graph() {
+        this.nodes = new ArrayList<>();
+    }
+
+    public void addNode(Node node) {
+        this.nodes.add(node);
+    }
+
+    public Node getNode(int id) {
+        for (Node node : nodes) {
+            if (node.id == id) {
+                return node;
+            }
+        }
+        return null;
+    }
+}
+
+class TopologicalSort {
+    public static List<Integer> topoSort(Graph graph) {
+        int V = graph.nodes.size();
+        Queue<Node> queue = new LinkedList<>();
+        Map<Node, Integer> inDegreeMap = new HashMap<>();
+
+        // Calculate the in-degree for each node
+        for (Node node : graph.nodes) {
+            for (Node neighbor : node.neighbors) {
+                inDegreeMap.put(neighbor, inDegreeMap.getOrDefault(neighbor, 0) + 1);
+            }
+        }
+
+        // Add all nodes with zero in-degree to the queue
+        for (Node node : graph.nodes) {
+            if (!inDegreeMap.containsKey(node)) {
+                queue.add(node);
+            }
+        }
+
+        List<Integer> result = new ArrayList<>();
+
+        while (!queue.isEmpty()) {
+            Node current = queue.poll();
+            result.add(current.id);
+
+            for (Node neighbor : current.neighbors) {
+                inDegreeMap.put(neighbor, inDegreeMap.get(neighbor) - 1);
+                if (inDegreeMap.get(neighbor) == 0) {
+                    queue.add(neighbor);
+                }
+            }
+        }
+
+        // If the result size is not equal to the number of nodes, there's a cycle
+        if (result.size() != V) {
+            System.out.println("Graph has a cycle, no topological sort possible.");
+            return null;
+        }
+
+        return result;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Graph graph = new Graph();
+
+        Node node1 = new Node(1);
+        Node node2 = new Node(2);
+        Node node3 = new Node(3);
+        Node node4 = new Node(4);
+
+        graph.addNode(node1);
+        graph.addNode(node2);
+        graph.addNode(node3);
+        graph.addNode(node4);
+
+        node1.addNeighbor(node2);
+        node1.addNeighbor(node3);
+        node2.addNeighbor(node4);
+        node3.addNeighbor(node4);
+
+        List<Integer> topoOrder = TopologicalSort.topoSort(graph);
+
+        if (topoOrder != null) {
+            System.out.println("Topological Sort: " + topoOrder);
+        }
+    }
+}
