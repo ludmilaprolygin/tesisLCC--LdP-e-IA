@@ -1,0 +1,34 @@
+public List<Node> getOrder(Graph graph) {
+    TopologicalOrder to = new TopologicalOrder();
+    for (Node node : graph.nodes) {
+        if (!to.order.contains(node)) {
+            to.visit(node);
+        }
+    }
+    return to.getOrder();
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Graph graph = new Graph();
+
+        Node A = new Node("A");
+        Node B = new Node("B");
+        Node C = new Node("C");
+
+        graph.addNode(A);
+        graph.addNode(B);
+        graph.addNode(C);
+
+        graph.addEdge(A, B);
+        graph.addEdge(B, C);
+        graph.addEdge(C, A); // Grafos no dirigidos pueden tener ciclos
+
+        List<Node> order = TopologicalOrder.getOrder(graph);
+
+        System.out.println("Orden topológico:");
+        for (Node node : order) {
+            System.out.print(node.name + " ");
+        }
+    }
+}
