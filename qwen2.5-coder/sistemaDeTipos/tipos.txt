@@ -1,0 +1,33 @@
+public class PromedioMayoresUmbral {
+
+    // Función principal para calcular el promedio mayor a umbral
+    public static double calcularPromedioMayorUmbral(double[] precios, double umbral) {
+        int contador = 0;
+        double suma = 0;
+
+        // Recorremos la lista de precios
+        for (int i = 0; i < precios.length; i++) {
+            if (precios[i] > umbral) {
+                suma += precios[i];
+                contador++;
+            }
+        }
+
+        // Si no hay ningún precio mayor al umbral, devolvemos 0
+        if (contador == 0) {
+            return 0;
+        }
+
+        // Calculamos el promedio y lo devolvemos
+        double promedio = suma / contador;
+        return promedio;
+    }
+
+    // Función principal para probar la implementación
+    public static void main(String[] args) {
+        double[] precios = {15.99, 20.50, 7.80, 45.60, 3.20};
+        double umbral = 20;
+        double promedio = calcularPromedioMayorUmbral(precios, umbral);
+        System.out.println("Promedio mayor al umbral: " + promedio);
+    }
+}
